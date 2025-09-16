@@ -55,6 +55,13 @@ Date: 2025-09-17
         - Migration: Run `composer run analyse`.
         - Rollback: Remove config + stubs.
 - [ ] Add PHPUnit bootstrap refresh using `wp-phpunit/wp-phpunit`; ensure tests run on PHP 7.4–8.2.
+ - [x] Add PHPUnit bootstrap refresh using `wp-phpunit/wp-phpunit`; ensure tests run on PHP 7.4–8.2.
+    - Mini Release Notes (Test Harness Modernized):
+        - Scope: Rewrote `tests/bootstrap.php` to use `wp-phpunit`, direct plugin load + explicit `_p2p_load()` / `_p2p_init()`; updated legacy PHPUnit assertions; fixed undefined variable in util; added activation smoke test.
+        - Impact: Full legacy test suite executes without fatal errors under PHPUnit 9 / PHP 8.x; remaining logical failures retained intentionally for future parity reference.
+        - Migration: Run `composer test` after `composer install`; no DB schema changes.
+        - Rollback: Restore previous bootstrap + revert assertion changes.
+        - Follow-up: When rewriting or replacing legacy frameworks, mirror intent of existing tests (even failing ones) to preserve expected public API behavior unless explicitly deprecated.
 - [x] Introduce `composer scripts` for lint/test (`composer test`, `composer lint`).
     - Mini Release Notes (Composer Scripts):
         - Scope: Added scripts for PHPCS, PHPStan, PHPUnit placeholder.

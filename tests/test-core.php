@@ -22,7 +22,7 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 		$this->assertEqualSets( $id_list, $resulting_ids );
 	}
 
-	function setUp() {
+	function setUp(): void {
 		P2P_Storage::install(); // call before $this->start_transaction()
 
 		parent::setUp();
@@ -214,7 +214,7 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 		$movie_id = $this->generate_post( 'movie' )->ID;
 
 		// create connection
-		$this->assertInternalType( 'int', $ctype->connect( $actor_id, $movie_id ) );
+		$this->assertIsInt( $ctype->connect( $actor_id, $movie_id ) );
 
 		$r = p2p_type( 'movies_to_movies' )->connect( $movie_id, $movie_id );
 		$this->assertEquals( 'self_connection', $r->get_error_code() );
@@ -245,8 +245,8 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 		$actor_ids = $this->generate_posts( 'actor', 2 );
 		$movie_ids = $this->generate_posts( 'movie', 2 );
 
-		$this->assertInternalType( 'int', $ctype->connect( $actor_ids[0], $movie_ids[0] ) );
-		$this->assertInternalType( 'int', $ctype->connect( $actor_ids[0], $movie_ids[1] ) );
+		$this->assertIsInt( $ctype->connect( $actor_ids[0], $movie_ids[0] ) );
+		$this->assertIsInt( $ctype->connect( $actor_ids[0], $movie_ids[1] ) );
 
 		$r = $ctype->connect( $actor_ids[1], $movie_ids[0] );
 		$this->assertEquals( 'cardinality_current', $r->get_error_code() );
@@ -583,7 +583,7 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 		$collection = $ctype->get_connectable( $movie, array(), 'abstract' );
 		$this->assertIdsMatch( array( $actor->ID ), $collection );
 
-		$this->assertInternalType( 'int', $ctype->connect( $movie, $actor ) );
+		$this->assertIsInt( $ctype->connect( $movie, $actor ) );
 
 		$collection = $ctype->get_connected( $movie, array(), 'abstract' );
 		$this->assertIdsMatch( array( $actor->ID ), $collection );
@@ -606,8 +606,8 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 		$collection = $ctype->get_connectable( $actors[0], array(), 'abstract' );
 		$this->assertIdsMatch( array_diff( $actors, array( $actors[0] ) ), $collection );
 
-		$this->assertInternalType( 'int', $ctype->connect( $actors[1], $actors[2] ) );
-		$this->assertInternalType( 'int', $ctype->connect( $actors[0], $actors[1] ) );
+		$this->assertIsInt( $ctype->connect( $actors[1], $actors[2] ) );
+		$this->assertIsInt( $ctype->connect( $actors[0], $actors[1] ) );
 
 		$directed = $ctype->set_direction( 'from' );
 		$collection = $directed->get_connected( 'any', array(), 'abstract' );
@@ -638,7 +638,8 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 
 		$connected = $ctype->get_connected( $movie );
 
-		p2p_list_posts( $connected, array( 'separator' => ', ', 'echo' => false ) );
+		$output = p2p_list_posts( $connected, array( 'separator' => ', ', 'echo' => false ) );
+		$this->assertStringContainsString( ', ', $output );
 	}
 
 	function test_any() {
