@@ -76,7 +76,13 @@ Date: 2025-09-17
         - Follow-up: Add coverage + WP version matrix, enforce non-zero exit for PHPCS/PHPStan once legacy cleanup advances.
 
 ### Pending (Next Up)
-- [ ] Phase 1.5 kickoff: Inventory scb-framework usages and classify (keep, adapt, replace). Output list in new `docs/SCB_INVENTORY.md`.
+- [x] Phase 1.5 kickoff: Inventory scb-framework usages and classify (keep, adapt, replace). Output list in new `SCB_INVENTORY.md`.
+    - Mini Release Notes (SCB Inventory Completed):
+        - Scope: Added `SCB_INVENTORY.md` cataloging bootstrap, schema, admin, utility, and activation touchpoints of scb-framework with migration priorities (P1–P3) and proposed adapters.
+        - Impact: Establishes clear decomposition plan enabling introduction of feature flag `P2P_DISABLE_SCB` without guesswork; reduces risk of missed legacy side-effects.
+        - Migration: None yet—purely documentation. Next step is implementing SchemaManager + bootstrap flag.
+        - Rollback: Remove file and TODO entry (no runtime changes made).
+        - Follow-up: Implement feature flag & SchemaManager (Phase 1.5 tasks) then add parity tests for activation and schema hash comparison.
 
 ## Phase 1.5 – Legacy Framework Sunset (scb-framework & Transitional Layer)
 Goal: Begin detaching from `scb-framework` while keeping plugin operational.
