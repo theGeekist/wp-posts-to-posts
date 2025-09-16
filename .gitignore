@@ -1,2 +1,8 @@
 vendor/
 composer.phar
+node_modules/
+build/
+coverage/
+phpstan-result.cache
+*.log
+/.phpunit.result.cache

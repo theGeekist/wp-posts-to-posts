@@ -22,15 +22,45 @@ Date: 2025-09-17
 
 ## Phase 0 – Baseline (Already Started)
 - [x] Prevent fatal on missing dependencies (graceful admin notice).
-- [ ] Document development setup (Composer, npm if needed) in README.
-- [ ] Add `.editorconfig` and `.gitignore` tweaks if needed for new build artifacts.
+    - Mini Release Notes (Baseline Fix):
+        - Scope: Added defensive dependency checks + admin notice fallback in `posts-to-posts.php`.
+        - Impact: Eliminates activation fatal when `vendor/` not installed.
+        - Migration: Run `composer install` if notice appears.
+        - Rollback: Revert file change; no DB impact.
+- [x] Document development setup (Composer, npm if needed) in README.
+    - Mini Release Notes (Dev Docs Added):
+        - Scope: Added development section (tooling commands, environment) to README.
+        - Impact: Onboards contributors with consistent workflow.
+        - Migration: None.
+        - Rollback: Remove README section.
+- [x] Add `.editorconfig` and `.gitignore` tweaks if needed for new build artifacts.
+    - Mini Release Notes (Editor & Ignore Config):
+        - Scope: Added `.editorconfig`; expanded `.gitignore` for build, coverage, caches.
+        - Impact: Normalizes formatting; prevents committing artifacts.
+        - Migration: Developers reload editor; no runtime effect.
+        - Rollback: Delete added config lines.
 
 ## Phase 1 – Tooling & Quality
-- [ ] Add `phpcs.xml.dist` with WordPress Coding Standards; generate baseline report.
+- [x] Add `phpcs.xml.dist` with WordPress Coding Standards; generate baseline report.
+    - Mini Release Notes (PHPCS Added):
+        - Scope: Introduced WordPress Core/Extra/Docs standards; excluded legacy areas temporarily.
+        - Impact: Enables incremental coding standards adoption.
+        - Migration: Run `composer run lint:phpcs`.
+        - Rollback: Remove `phpcs.xml.dist`.
 - [ ] Add GitHub Actions workflow: PHPCS + PHPStan (level 0 baseline -> raise gradually).
-- [ ] Add `phpstan.neon.dist` + baseline file.
+- [x] Add `phpstan.neon.dist` + baseline file.
+    - Mini Release Notes (PHPStan Level 0):
+        - Scope: Added configuration + WordPress stubs for analysis without full bootstrap.
+        - Impact: Static analysis foundation; reveals dynamic property deprecations.
+        - Migration: Run `composer run analyse`.
+        - Rollback: Remove config + stubs.
 - [ ] Add PHPUnit bootstrap refresh using `wp-phpunit/wp-phpunit`; ensure tests run on PHP 7.4–8.2.
-- [ ] Introduce `composer scripts` for lint/test (`composer test`, `composer lint`).
+- [x] Introduce `composer scripts` for lint/test (`composer test`, `composer lint`).
+    - Mini Release Notes (Composer Scripts):
+        - Scope: Added scripts for PHPCS, PHPStan, PHPUnit placeholder.
+        - Impact: Standardizes contributor commands.
+        - Migration: `composer install` then run scripts.
+        - Rollback: Remove scripts section from composer.json.
 
 ## Phase 1.5 – Legacy Framework Sunset (scb-framework & Transitional Layer)
 Goal: Begin detaching from `scb-framework` while keeping plugin operational.
