@@ -60,15 +60,26 @@ function _p2p_init() {
 
 if ( is_dir( dirname( __FILE__ ) . '/vendor' ) ) {
 	// Not using vendor/autload.php because scb-framework/load.php has better compatibility
-
-	if (!class_exists('Mustache_Autoloader')) {
+	if ( ! class_exists( 'Mustache_Autoloader' ) && file_exists( dirname( __FILE__ ) . '/vendor/mustache/mustache/src/Mustache/Autoloader.php' ) ) {
 		require_once dirname( __FILE__ ) . '/vendor/mustache/mustache/src/Mustache/Autoloader.php';
 		Mustache_Autoloader::register();
 	}
 
-	require_once dirname( __FILE__ ) . '/vendor/scribu/scb-framework/load.php';
+	// Load scb framework if available
+	if ( file_exists( dirname( __FILE__ ) . '/vendor/scribu/scb-framework/load.php' ) ) {
+		require_once dirname( __FILE__ ) . '/vendor/scribu/scb-framework/load.php';
+	}
 }
 
-scb_init( '_p2p_load' );
+if ( function_exists( 'scb_init' ) ) {
+	scb_init( '_p2p_load' );
+} else {
+	// Graceful admin notice instead of fatal error if dependencies missing
+	add_action( 'admin_notices', function() {
+		if ( current_user_can( 'activate_plugins' ) ) {
+			echo '<div class="notice notice-error"><p>Posts 2 Posts: required dependencies not found. Run composer install within the plugin directory.</p></div>';
+		}
+	} );
+}
 add_action( 'wp_loaded', '_p2p_init' );
 
