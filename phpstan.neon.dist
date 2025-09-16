@@ -1,0 +1,16 @@
+parameters:
+    level: 0
+    bootstrapFiles:
+        - phpstan-stubs.php
+    paths:
+        - posts-to-posts.php
+        - admin
+        - phpstan-stubs.php
+    excludePaths:
+        - vendor
+        - tests
+    tmpDir: build/phpstan
+    checkMissingIterableValueType: false
+    reportUnmatchedIgnoredErrors: true
+
+# Raise levels incrementally; document each bump in release notes.
