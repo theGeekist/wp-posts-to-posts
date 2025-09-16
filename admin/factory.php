@@ -40,20 +40,25 @@ abstract class P2P_Factory {
 	}
 
 	// Begin processing item queue for a particular screen.
-	function add_items() {
-		$screen = get_current_screen();
+	// Modernized to allow optional manual invocation with explicit object type & post type
+	// while keeping backwards compatibility with legacy usage (no parameters, derive from screen).
+	function add_items( $object_type = null, $post_type = null ) {
+		if ( null === $object_type ) {
+			$screen = get_current_screen();
 
-		$screen_map = array(
-			'edit' => 'post',
-			'users' => 'user'
-		);
+			$screen_map = array(
+				'edit' => 'post',
+				'users' => 'user'
+			);
 
-		if ( !isset( $screen_map[ $screen->base ] ) )
-			return;
+			if ( !isset( $screen_map[ $screen->base ] ) )
+				return;
 
-		$object_type = $screen_map[ $screen->base ];
+			$object_type = $screen_map[ $screen->base ];
+			$post_type   = $screen->post_type;
+		}
 
-		$this->filter( $object_type, $screen->post_type );
+		$this->filter( $object_type, $post_type );
 	}
 
 	// Filter item queue based on object type.

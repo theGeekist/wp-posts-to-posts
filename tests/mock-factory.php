@@ -17,8 +17,13 @@ class P2P_Factory_Mock extends P2P_Factory {
 		$this->added_items[] = func_get_args();
 	}
 
-	function add_items( $object_type, $post_type = false ) {
-		$this->filter( $object_type, $post_type );
+	function add_items( $object_type = null, $post_type = null ) {
+		if ( null === $object_type ) {
+			// Mirror parent fallback if called without parameters (not used in tests but keeps parity)
+			parent::add_items();
+		} else {
+			$this->filter( $object_type, $post_type );
+		}
 
 		$r = $this->added_items;
 

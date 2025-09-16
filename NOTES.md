@@ -131,3 +131,25 @@ Modern restructuring proposal (incremental):
 
 ## 21. Summary
 The plugin is functionally valuable but rests on a legacy stack (scb-framework + classic metabox + procedural API). With staged modernization emphasizing REST + block editor UX, namespace adoption, and improved tooling, it can align with contemporary WordPress development while preserving backward compatibility.
+
+## 22. Current Logical Test Failures (Intentionally Deferred)
+The PHPUnit harness now executes fully without fatals. Several tests still fail logically; they are preserved verbatim to act as executable specification of legacy expectations. These are deferred until after architectural refactors so we can consciously decide whether to keep, adapt, or deprecate behaviors.
+
+| Test | Symptom | Root Cause (Preliminary) | Suggested Future Action |
+|------|---------|--------------------------|-------------------------|
+| `test_connected_query` | `$connected[0]->p2p_id` empty; count OK | Connection object returned by `get_users()` loses injected `p2p_id` when meta query (`connected_query`) path runs. Likely missing join alias or late hydration step in `connected_posts->each()` for user queries with meta filters. | Audit query builder for user-side connections with meta constraints; ensure `p2p_id` column selected and mapped into `P2P_User` wrapper (or populate via second lightweight query). |
+| `test_p2p_list_posts_separator` | Fails expecting `', '` in output with only single connected item | Test added assertion to avoid being marked risky; legacy helper only adds separators between multiple items; single-item case naturally lacks separator. | Adjust test to create two connections OR relax assertion to check output non-empty. Decision: likely revise test when enhancing output helper. |
+| `test_any` (final assertion) | After `disconnect(...,'any')`, `$connected_users->items` not empty | `disconnect()` with `'any'` sentinel does not coerce to expected direction; logic only matches explicit object IDs. Residual connections remain. | Extend disconnect path to treat `'any'` as wildcard for currently set direction; re-run to confirm count reduction; add regression test for cardinality scenarios. |
+| `test_each_connected_users` (warning only) | Warning: `Corrupted data for item X` from `_p2p_get_other_id()` | Warning triggered when row side resolution mismatches expected direction (user/post ordering) for user connections—likely due to inconsistent assignment of `p2p_from`/`p2p_to` for user types or missing schema abstraction. | Inspect storage insertion for user connections; enforce canonical direction ordering; add validation in hydration eliminating false-positive corruption warnings. |
+
+### Rationale for Deferral
+Resolving these now risks churn ahead of planned namespacing and storage abstraction (Phases 1.5–3). Keeping failing tests documents expected legacy semantics; when implementing REST + new services, replicate or consciously document deviations (add release notes & deprecations where changed).
+
+### Follow-Up Checklist
+1. Introduce focused integration tests around connection hydration for posts vs users (ensure `p2p_id`, direction flags).
+2. Add instrumentation/logging toggle to capture raw SQL for failing scenarios to ease future debugging.
+3. Decide policy for helper outputs (e.g., separators for single item) and update tests accordingly.
+4. Implement wildcard-aware disconnect semantics; update docs.
+5. Replace ad-hoc corruption warning with structured exception or silent self-heal (data repair routine) once storage layer refactored.
+
+_Added: 2025-09-17 (post harness stabilization)._
