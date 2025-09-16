@@ -47,7 +47,7 @@ Date: 2025-09-17
         - Impact: Enables incremental coding standards adoption.
         - Migration: Run `composer run lint:phpcs`.
         - Rollback: Remove `phpcs.xml.dist`.
-- [ ] Add GitHub Actions workflow: PHPCS + PHPStan (level 0 baseline -> raise gradually).
+- [x] Add GitHub Actions workflow: PHPCS + PHPStan (level 0 baseline -> raise gradually).
 - [x] Add `phpstan.neon.dist` + baseline file.
     - Mini Release Notes (PHPStan Level 0):
         - Scope: Added configuration + WordPress stubs for analysis without full bootstrap.
@@ -68,13 +68,15 @@ Date: 2025-09-17
         - Migration: `composer install` then run scripts.
         - Rollback: Remove scripts section from composer.json.
 
+    - Mini Release Notes (CI Workflow Added):
+        - Scope: Added `.github/workflows/ci.yml` running PHPCS, PHPStan, and PHPUnit across PHP 7.4–8.2.
+        - Impact: Establishes baseline continuous integration gate; catches syntax / standards / fatal regressions before legacy framework sunset and REST introduction.
+        - Migration: None; contributors run `composer install && composer test` locally for parity.
+        - Rollback: Delete workflow file; remove any README status badge (future addition).
+        - Follow-up: Add coverage + WP version matrix, enforce non-zero exit for PHPCS/PHPStan once legacy cleanup advances.
+
 ### Pending (Next Up)
-- [ ] Add GitHub Actions workflow: PHPCS + PHPStan + PHPUnit matrix (7.4, 8.0, 8.1, 8.2; WP latest) with artifact for junit + coverage (optional initial stub).
-    - Mini Release Notes (CI Workflow Added) [DRAFT]:
-        - Scope: Introduces `.github/workflows/ci.yml` running coding standards, static analysis, and test suite across PHP versions.
-        - Impact: Prevents regressions; establishes quality gate before further refactors (scb sunset, REST layer).
-        - Migration: None required for users; contributors ensure tests pass locally before pushing.
-        - Rollback: Delete workflow file; remove status badge (future) from README.
+- [ ] Phase 1.5 kickoff: Inventory scb-framework usages and classify (keep, adapt, replace). Output list in new `docs/SCB_INVENTORY.md`.
 
 ## Phase 1.5 – Legacy Framework Sunset (scb-framework & Transitional Layer)
 Goal: Begin detaching from `scb-framework` while keeping plugin operational.
