@@ -59,6 +59,37 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 
 ## Changelog
 
+## Development
+
+### Requirements
+- PHP 7.4–8.2
+- Composer 2.x
+- (Upcoming) Node.js (for block editor integration in later phases)
+
+### Setup
+```bash
+cd wp-content/plugins/wp-posts-to-posts
+composer install
+```
+
+### Tooling Commands
+```bash
+composer run lint:phpcs   # Run WordPress Coding Standards
+composer run analyse      # Run PHPStan (level 0 baseline)
+composer run test         # (Placeholder) PHPUnit – to be wired in Phase 1
+```
+
+### Contributing Flow (Phase 1)
+1. Create feature branch: `git checkout -b feature/your-task`
+2. Make minimal, focused changes.
+3. Run lint & analysis commands; ensure no new errors.
+4. Update `TODO.md` task with Mini Release Notes on completion.
+5. Open PR against `main`.
+
+### Coding Principles
+See `TODO.md` Ground Rules. Emphasis on simplification, purity, and backward compatibility while introducing modernization layers.
+
+
 ### 1.6.5
 * fixed error when Mustache is already loaded. props ApatheticG
 * fixed WP_User_Query warning. props PatelUtkarsh
