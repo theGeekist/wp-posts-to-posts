@@ -1,11 +1,19 @@
 <?php
 
-_p2p_load_admin();
-
-require_once __DIR__ . '/mock-column.php';
-
-
 class P2P_Tests_Column extends WP_UnitTestCase {
+
+	function setUp(): void {
+		parent::setUp();
+		if ( function_exists( '_p2p_load_admin' ) && ! class_exists( 'P2P_Column' ) ) {
+			_p2p_load_admin();
+		}
+		if ( ! class_exists( 'P2P_Column' ) && class_exists( 'P2P_Autoload' ) ) {
+			P2P_Autoload::register( 'P2P_', dirname( __DIR__ ) . '/admin' );
+		}
+		if ( ! class_exists( 'P2P_Column_Mock' ) ) {
+			require_once __DIR__ . '/mock-column.php';
+		}
+	}
 
 	function test_default_title() {
 		$ctype = p2p_register_connection_type( array(

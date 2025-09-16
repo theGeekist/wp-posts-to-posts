@@ -4,7 +4,7 @@ class P2P_Tests_List extends WP_UnitTestCase {
 
 	static $list;
 
-	static function setUpBeforeClass() {
+	static function setUpBeforeClass(): void {
 		$list = array();
 
 		for ( $i = 0; $i < 3; $i++ ) {

@@ -1,16 +1,32 @@
 <?php
 
-_p2p_load_admin();
+// Ensure admin context so that plugin bootstrap loads admin pieces.
+if ( ! function_exists( 'is_admin' ) ) {
+	function is_admin() { return true; }
+}
 
 require_once __DIR__ . '/constraints.php';
-require_once __DIR__ . '/mock-factory.php';
+// mock-factory will be loaded lazily in setUp once admin classes are present.
 
 
 class P2P_Tests_Admin_Factory extends WP_UnitTestCase {
+	/** @var P2P_Factory_Mock */
+	private $mock;
 
-	function setUp() {
-		$this->mock = new P2P_Factory_Mock;
+	function setUp(): void {
 		parent::setUp();
+		// Ensure admin autoload is registered (in case plugin init not invoked yet)
+		if ( function_exists( '_p2p_load_admin' ) && ! class_exists( 'P2P_Factory' ) ) {
+			_p2p_load_admin();
+		}
+		// Fallback: register autoload directly if still missing
+		if ( ! class_exists( 'P2P_Factory' ) && class_exists( 'P2P_Autoload' ) ) {
+			P2P_Autoload::register( 'P2P_', dirname( __DIR__ ) . '/admin' );
+		}
+		if ( ! class_exists( 'P2P_Factory_Mock' ) ) {
+			require_once __DIR__ . '/mock-factory.php';
+		}
+		$this->mock = new P2P_Factory_Mock;
 	}
 
 	function test_factory_none() {

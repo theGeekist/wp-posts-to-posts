@@ -6,3 +6,4 @@ coverage/
 phpstan-result.cache
 *.log
 /.phpunit.result.cache
+wordpress

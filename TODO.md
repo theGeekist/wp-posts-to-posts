@@ -54,8 +54,7 @@ Date: 2025-09-17
         - Impact: Static analysis foundation; reveals dynamic property deprecations.
         - Migration: Run `composer run analyse`.
         - Rollback: Remove config + stubs.
-- [ ] Add PHPUnit bootstrap refresh using `wp-phpunit/wp-phpunit`; ensure tests run on PHP 7.4–8.2.
- - [x] Add PHPUnit bootstrap refresh using `wp-phpunit/wp-phpunit`; ensure tests run on PHP 7.4–8.2.
+- [x] Add PHPUnit bootstrap refresh using `wp-phpunit/wp-phpunit`; ensure tests run on PHP 7.4–8.2.
     - Mini Release Notes (Test Harness Modernized):
         - Scope: Rewrote `tests/bootstrap.php` to use `wp-phpunit`, direct plugin load + explicit `_p2p_load()` / `_p2p_init()`; updated legacy PHPUnit assertions; fixed undefined variable in util; added activation smoke test.
         - Impact: Full legacy test suite executes without fatal errors under PHPUnit 9 / PHP 8.x; remaining logical failures retained intentionally for future parity reference.
@@ -68,6 +67,14 @@ Date: 2025-09-17
         - Impact: Standardizes contributor commands.
         - Migration: `composer install` then run scripts.
         - Rollback: Remove scripts section from composer.json.
+
+### Pending (Next Up)
+- [ ] Add GitHub Actions workflow: PHPCS + PHPStan + PHPUnit matrix (7.4, 8.0, 8.1, 8.2; WP latest) with artifact for junit + coverage (optional initial stub).
+    - Mini Release Notes (CI Workflow Added) [DRAFT]:
+        - Scope: Introduces `.github/workflows/ci.yml` running coding standards, static analysis, and test suite across PHP versions.
+        - Impact: Prevents regressions; establishes quality gate before further refactors (scb sunset, REST layer).
+        - Migration: None required for users; contributors ensure tests pass locally before pushing.
+        - Rollback: Delete workflow file; remove status badge (future) from README.
 
 ## Phase 1.5 – Legacy Framework Sunset (scb-framework & Transitional Layer)
 Goal: Begin detaching from `scb-framework` while keeping plugin operational.
